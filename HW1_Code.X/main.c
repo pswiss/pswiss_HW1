@@ -57,8 +57,17 @@ int main() {
 
     __builtin_enable_interrupts();
     
+    // Configure RB4 as input
+    
+    // Configure AN4 as output
+    ANSELA = 0;
+    TRISAbits.TRISA4 = 0;
+    
+    // Turn on the LED
+    LATAbits.LATA4 = 1;
+    
     // Variable for the LED
-    char ledIsOn = 0;
+    char ledIsOn = 1;
 
     while(1) {
 	    // use _CP0_SET_COUNT(0) and _CP0_GET_COUNT() to test the PIC timing
