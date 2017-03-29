@@ -58,6 +58,8 @@ int main() {
     __builtin_enable_interrupts();
     
     // Configure RB4 as input
+    ANSELB = 0;
+    TRISBbits.TRISB4 = 1;
     
     // Configure AN4 as output
     ANSELA = 0;
@@ -68,24 +70,22 @@ int main() {
     
     // Variable for the LED
     char ledIsOn = 1;
+    
+    // Initialize the Timer
+    _CP0_SET_COUNT(0);
+    int timetoWait = 48000000*0.0005/2;
 
     while(1) {
 	    // use _CP0_SET_COUNT(0) and _CP0_GET_COUNT() to test the PIC timing
 		  // remember the core timer runs at half the CPU speed
         
-        // Wait for 0.001 s
-        
-        if(ledIsOn == 1)
+        // Wait for 0.0005 s
+        if(_CP0_GET_COUNT()>timetoWait&&PORTBbits.RB4==1)
         {
-            // Turn off the LED and flip the variable
-            // toggle LED pin
-            ledIsOn = 0;
-        }
-        else
-        {
-            // Turn off the LED and flip the variable
-            // toggle LED pin
-            ledIsOn = 1;
+            _CP0_SET_COUNT(0);
+            LATAbits.LATA4 = ~LATAbits.LATA4;
+            ledIsOn = ~ledIsOn;
+            
         }
 
         
